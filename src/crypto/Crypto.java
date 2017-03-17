@@ -5,6 +5,8 @@
  */
 package crypto;
 
+import java.security.NoSuchAlgorithmException;
+
 /**
  *
  * @author carlosarli
@@ -14,8 +16,10 @@ public class Crypto {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchAlgorithmException {
         // TODO code application logic here
+        GeneratePuzzles gen = new GeneratePuzzles();
+        gen.generate();
     }
     
 }
