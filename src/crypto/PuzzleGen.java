@@ -64,6 +64,7 @@ public class PuzzleGen {
     }
     
     /**
+     * ALICE
      * Generates puzzles
      */
     public void generate() throws NoSuchAlgorithmException{
@@ -83,10 +84,14 @@ public class PuzzleGen {
         }
         saveUnEncryptedPuzzles();
         for(Puzzle p : puzzles){
-            System.out.println(p.toString());
+            System.out.println("Puzzles : " + p.toString());
         }
     }
     
+        /**
+         * ALICE
+         * Saves unencrypted puzzles for lookup
+         */
        public void saveUnEncryptedPuzzles(){
         try{
             //Init Print Writer.
@@ -159,10 +164,10 @@ public class PuzzleGen {
             //Store in encrytped puzzle arraylist
             ePuzzles.add(encryptedPuzzle);
         }
-        
+        /*
         for(byte[] b : ePuzzles){
             System.out.println(Arrays.toString(b));
-        }
+        }*/
         
     }
     

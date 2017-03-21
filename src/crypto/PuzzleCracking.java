@@ -27,7 +27,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
 /**
- *
+ * 
  * @author eghar
  * @created 15/03/16
  */
@@ -36,11 +36,15 @@ public class PuzzleCracking {
     public ArrayList<String> puzzles = new ArrayList();
     
     public String chosenPuzzle;
+    public String sharedKey;
+    public byte[] sharedKeyBob = new byte[8];
+    public byte[] sharedKeyAlice = new byte[8];
     
     static Cipher cipher;
     public CryptoLib cl;
     
     byte[] puzzleNumber = new byte[2];
+            
     /**
      * Reads "puzzles.txt" and stores encrypted puzzles in ArrayList
      */
@@ -96,13 +100,13 @@ public class PuzzleCracking {
     /**
      * Cracks puzzle by looping through and generating all possible keys
      */
-    public void crackPuzzle() throws InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException,NoSuchPaddingException{
+    public byte[] crackPuzzle() throws InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException,NoSuchPaddingException{
         cipher = Cipher.getInstance("DES");
         byte[] decryptedByte = new byte[26];
         
         //Convert chosen puzzle back to byte array
         byte[] encryptedPuzzle = cl.stringToByteArray(choosePuzzle());
-        System.out.println("ENCRYPTED PUZZLE: " + Arrays.toString(encryptedPuzzle));
+        //System.out.println("ENCRYPTED PUZZLE: " + Arrays.toString(encryptedPuzzle));
         
         int j=0;
         for(int i=0; i<65535; i++){
@@ -120,24 +124,34 @@ public class PuzzleCracking {
                 // Decrpyt puzzle 
                 decryptedByte = cipher.doFinal(encryptedPuzzle);
                 
-                System.out.println("DECRYPTED: " + j + "   " + Arrays.toString(decryptedByte)+ "   " + Base64.getEncoder().encodeToString(secretKey.getEncoded()));
+                //System.out.println("DECRYPTED: " + j + "   " + Arrays.toString(decryptedByte)+ "   " + Base64.getEncoder().encodeToString(secretKey.getEncoded()));
                    j++;
                 
                 if(checkPuzzle(decryptedByte)){
+                    System.out.println("Bobs Decrypted Puzzle: " + Arrays.toString(decryptedByte));
+                    // Save shared key
+                    sharedKeyBob = getSharedKeyBob(decryptedByte); 
                     
-                    saveKey(secretKey); 
-                    
-                    getPuzzleNumber(decryptedByte);
+                    // Save puzzle number
+                    puzzleNumber = getPuzzleNumber(decryptedByte);
                 }
+                
             }catch(BadPaddingException e){
                 
                   //System.out.println("FAILED: " + i + "   " + Arrays.toString(decryptedByte));
             }
             
         }
+        System.out.println("Bob's shared key: " + Arrays.toString(sharedKeyBob));
+        System.out.println("Bob sends alice puzzle number: " + Arrays.toString(puzzleNumber));
+        return sharedKeyBob;
     }
     
-    //create a methiod to check leading 0
+    /**
+     * Checks puzzle is the puzzle we are looking for
+     * @param decryptedPuzzle
+     * @return 
+     */
     private boolean checkPuzzle(byte[] decryptedPuzzle){
         
         boolean allZero = false;
@@ -149,13 +163,31 @@ public class PuzzleCracking {
                 
             }else{
                 allZero = false;
-            }
-                
+            }      
         }
-      
         return allZero;
     }
+        
+    /**
+     * BOB
+     * Gets bobs shared key from the byte array he decrypts
+     * @param decryptedByte
+     * @return 
+     */     
+    public byte[] getSharedKeyBob(byte[] decryptedByte){  
+
+        // Copies the shared key from the decrypted bite
+        System.arraycopy(decryptedByte, 18, sharedKeyBob, 0, 8);
+
+        return sharedKeyBob;
+    }
     
+    /**
+     * BOB
+     * Gets puzzle number from the decrypted puzzle
+     * @param decryptedPuzzle
+     * @return 
+     */
     public byte[] getPuzzleNumber(byte[] decryptedPuzzle){
         
         for(int i = 16; i<18; i++){
@@ -166,71 +198,61 @@ public class PuzzleCracking {
             }
                   
         }
-        System.out.println("PUZZLE NUMBER: " + puzzleNumber);
         return puzzleNumber;
     }
     
-    public void saveKey(SecretKey key){
-        try{
-            //Init Print Writer.
-            PrintWriter writer = new PrintWriter("key.txt", "UTF-8");
-          
-                
-            // Convert encrypted puzzle to string
-            String keyToString = Base64.getEncoder().encodeToString(key.getEncoded()) ;
-                
-            // Write string to file
-            writer.println(keyToString);
-        
-            writer.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-    /*
-    public void savePuzzleNumber(byte[] puzzleNumber){
-        
-        try {
-            
-            PrintWriter writer = new PrintWriter("puzzleNumber.txt", "UTF-8");
-            
-            String pnToString = Arrays.toString(puzzleNumber);
-            
-            writer.println(pnToString);
-        
-            writer.close();
-            
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PuzzleCracking.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(PuzzleCracking.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
-    */
-    
-    public byte[] keyLookUp(){
+    /**
+     * ALICE
+     * Puzzle lookup using puzzle number
+     * @return 
+     */
+    public byte[] puzzleLookUp(){
+        byte[] currentPuzzle = new byte[26];
         try{
             BufferedReader reader = new BufferedReader(new FileReader("unEncryptedPuzzles.txt"));
             String puzzle = reader.readLine();
             boolean rightPuzzle;
-            byte[] currentPuzzle = new byte[26];
             
             while(puzzle!=null){
                 currentPuzzle = cl.stringToByteArray(puzzle);
                 
                 if(currentPuzzle[16]==puzzleNumber[0]&& currentPuzzle[17]==puzzleNumber[1]) {
                     rightPuzzle = true;
+                    break;
                 }else{
                     rightPuzzle = false;
                 }
-       
+                
                 puzzle = reader.readLine();
             }
             
         }catch(IOException e){
             e.printStackTrace();
         }
-        return null;
+        return currentPuzzle;
+    }
+    
+    /**
+     * ALICE
+     * Gets Alice's shared key from the current puzzle she has looked up
+     * @param currentPuzzle
+     * @return 
+     */
+    public byte[] sharedKeyAlice(byte[] currentPuzzle){
+        try{
+            //Init Print Writer.
+            PrintWriter writer = new PrintWriter("sharedKey.txt", "UTF-8");
+            
+            System.arraycopy(currentPuzzle, 18, sharedKeyAlice, 0, 8);
+            // Convert encrypted puzzle to string
+                
+            // Write string to file
+            System.out.println("Shared Key Alice: " + Arrays.toString(sharedKeyAlice));
+        
+            writer.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }  
+        return sharedKeyAlice;
     }
 }
