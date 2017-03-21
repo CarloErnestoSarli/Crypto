@@ -6,9 +6,11 @@
 package crypto;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -36,6 +40,7 @@ public class PuzzleCracking {
     static Cipher cipher;
     public CryptoLib cl;
     
+    byte[] puzzleNumber = new byte[2];
     /**
      * Reads "puzzles.txt" and stores encrypted puzzles in ArrayList
      */
@@ -119,7 +124,10 @@ public class PuzzleCracking {
                    j++;
                 
                 if(checkPuzzle(decryptedByte)){
-                    saveKey(secretKey);          
+                    
+                    saveKey(secretKey); 
+                    
+                    getPuzzleNumber(decryptedByte);
                 }
             }catch(BadPaddingException e){
                 
@@ -138,13 +146,28 @@ public class PuzzleCracking {
             
             if(decryptedPuzzle[i] == 0){
                 allZero = true;
+                
             }else{
                 allZero = false;
             }
                 
         }
-        
+      
         return allZero;
+    }
+    
+    public byte[] getPuzzleNumber(byte[] decryptedPuzzle){
+        
+        for(int i = 16; i<18; i++){
+            if(i == 16){
+                puzzleNumber[0] = decryptedPuzzle[i];
+            }else{
+                puzzleNumber[1] = decryptedPuzzle[i];
+            }
+                  
+        }
+        System.out.println("PUZZLE NUMBER: " + puzzleNumber);
+        return puzzleNumber;
     }
     
     public void saveKey(SecretKey key){
@@ -163,5 +186,51 @@ public class PuzzleCracking {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+    /*
+    public void savePuzzleNumber(byte[] puzzleNumber){
+        
+        try {
+            
+            PrintWriter writer = new PrintWriter("puzzleNumber.txt", "UTF-8");
+            
+            String pnToString = Arrays.toString(puzzleNumber);
+            
+            writer.println(pnToString);
+        
+            writer.close();
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PuzzleCracking.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(PuzzleCracking.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    */
+    
+    public byte[] keyLookUp(){
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader("unEncryptedPuzzles.txt"));
+            String puzzle = reader.readLine();
+            boolean rightPuzzle;
+            byte[] currentPuzzle = new byte[26];
+            
+            while(puzzle!=null){
+                currentPuzzle = cl.stringToByteArray(puzzle);
+                
+                if(currentPuzzle[16]==puzzleNumber[0]&& currentPuzzle[17]==puzzleNumber[1]) {
+                    rightPuzzle = true;
+                }else{
+                    rightPuzzle = false;
+                }
+       
+                puzzle = reader.readLine();
+            }
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

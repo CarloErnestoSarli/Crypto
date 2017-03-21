@@ -69,7 +69,8 @@ public class Puzzle {
     }
     
     public String toString(){
-        return "Puzzle : " + getNumber() + ".  " + Arrays.toString(getLz()) + " " + Arrays.toString(getId()) + " " + Arrays.toString(getDes()) + ". \n" + Arrays.toString(getPuzzleBytes());
+        return Arrays.toString(getPuzzleBytes());
+         
     }
     
 }

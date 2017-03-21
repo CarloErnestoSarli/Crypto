@@ -81,9 +81,31 @@ public class PuzzleGen {
             // Store to array
             puzzles.add(p);
         }
-        
+        saveUnEncryptedPuzzles();
         for(Puzzle p : puzzles){
             System.out.println(p.toString());
+        }
+    }
+    
+       public void saveUnEncryptedPuzzles(){
+        try{
+            //Init Print Writer.
+            PrintWriter writer = new PrintWriter("unEncryptedPuzzles.txt", "UTF-8");
+            byte[] currentPuzzle = new byte[26];
+            for(int i=0; i<puzzles.size(); i++){
+                // Get current encrypted puzzle byte array
+                currentPuzzle = puzzles.get(i).getPuzzleBytes();
+                
+                // Convert encrypted puzzle to string
+                String puzzleString = cl.byteArrayToString(currentPuzzle);
+                
+                // Write string to file
+                writer.println(puzzleString);
+            }
+ 
+            writer.close();
+        }catch(IOException e){
+            e.printStackTrace();
         }
     }
     
