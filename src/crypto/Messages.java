@@ -23,6 +23,10 @@ import javax.crypto.SecretKey;
  * @date 21/03/2017
  */
 public class Messages {
+
+    /**
+     *
+     */
     public CryptoLib cl;
     static Cipher cipher;
     

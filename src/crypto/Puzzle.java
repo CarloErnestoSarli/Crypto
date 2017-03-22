@@ -19,6 +19,12 @@ public class Puzzle {
     private byte[] id;
     private byte[] des;
     
+    /**
+     *
+     * @param number
+     * @param id
+     * @param des
+     */
     public Puzzle(int number, byte[] id, byte[] des){
         this.number = number;
         this.lz = new byte[16];
@@ -26,34 +32,66 @@ public class Puzzle {
         this.des = des;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getNumber(){
         return number;
     }
     
+    /**
+     *
+     * @return
+     */
     public byte[] getLz(){
         return lz;
     }
     
+    /**
+     *
+     * @return
+     */
     public byte[] getId(){
         return id;
     }
     
+    /**
+     *
+     * @return
+     */
     public byte[] getDes(){
         return des;
     }
     
+    /**
+     *
+     * @param number
+     */
     public void setNumber(int number){
         this.number = number;
     }
     
+    /**
+     *
+     * @param id
+     */
     public void setId(byte[] id){
         this.id = id;
     }
     
+    /**
+     *
+     * @param id
+     */
     public void setDes(byte[] id){
         this.des = des;
     }
     
+    /**
+     *
+     * @return
+     */
     public byte[] getPuzzleBytes(){
         byte[] puzzleBytes = new byte[getLz().length + getId().length + getDes().length];
         

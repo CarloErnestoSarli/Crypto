@@ -22,6 +22,12 @@ public class Crypto {
 
     /**
      * @param args the command line arguments
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws javax.crypto.BadPaddingException
+     * @throws java.security.InvalidKeyException
+     * @throws java.security.spec.InvalidKeySpecException
+     * @throws javax.crypto.NoSuchPaddingException
+     * @throws javax.crypto.IllegalBlockSizeException
      */
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, NoSuchPaddingException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         // TODO code application logic here

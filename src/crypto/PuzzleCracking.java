@@ -33,14 +33,36 @@ import javax.crypto.SecretKey;
  */
 public class PuzzleCracking {
     
+    /**
+     *
+     */
     public ArrayList<String> puzzles = new ArrayList();
     
+    /**
+     *
+     */
     public String chosenPuzzle;
+
+    /**
+     *
+     */
     public String sharedKey;
+
+    /**
+     *
+     */
     public byte[] sharedKeyBob = new byte[8];
+
+    /**
+     *
+     */
     public byte[] sharedKeyAlice = new byte[8];
     
     static Cipher cipher;
+
+    /**
+     *
+     */
     public CryptoLib cl;
     
     byte[] puzzleNumber = new byte[2];
@@ -99,6 +121,12 @@ public class PuzzleCracking {
     
     /**
      * Cracks puzzle by looping through and generating all possible keys
+     * @return 
+     * @throws java.security.spec.InvalidKeySpecException
+     * @throws java.security.InvalidKeyException
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws javax.crypto.IllegalBlockSizeException
+     * @throws javax.crypto.NoSuchPaddingException
      */
     public byte[] crackPuzzle() throws InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException,NoSuchPaddingException{
         cipher = Cipher.getInstance("DES");

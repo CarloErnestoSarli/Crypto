@@ -28,14 +28,31 @@ import javax.crypto.SecretKey;
  */
 public class PuzzleGen {
     
+    /**
+     *
+     */
     public final int MAX_PUZZLES = 1024;
     
     static Cipher cipher;
+
+    /**
+     *
+     */
     public CryptoLib cl;
     
+    /**
+     *
+     */
     public ArrayList<Puzzle> puzzles;
+
+    /**
+     *
+     */
     public ArrayList<byte[]> ePuzzles;
     
+    /**
+     *
+     */
     public PuzzleGen(){
         this.puzzles = new ArrayList();
         this.ePuzzles = new ArrayList();
@@ -66,6 +83,7 @@ public class PuzzleGen {
     /**
      * ALICE
      * Generates puzzles
+     * @throws java.security.NoSuchAlgorithmException
      */
     public void generate() throws NoSuchAlgorithmException{
         
@@ -140,6 +158,12 @@ public class PuzzleGen {
     
     /**
      * Encrypts Puzzles using DES key. @see genEncryptionKeyBytes
+     * @throws java.security.spec.InvalidKeySpecException
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws java.security.InvalidKeyException
+     * @throws javax.crypto.IllegalBlockSizeException
+     * @throws javax.crypto.NoSuchPaddingException
+     * @throws javax.crypto.BadPaddingException
      */
     public void puzzleEnrypt() throws InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException{
         cipher = Cipher.getInstance("DES");
