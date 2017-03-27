@@ -22,8 +22,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
 /**
- *
- * @author eghar
+ * @author carlosarli
+ * @author edharper
  * @created 14/03/16
  */
 public class PuzzleGen {

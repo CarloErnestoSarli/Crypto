@@ -16,6 +16,7 @@ import javax.crypto.NoSuchPaddingException;
 /**
  *
  * @author carlosarli
+ * @author edharper
  * @created 14/03/16
  */
 public class Crypto {

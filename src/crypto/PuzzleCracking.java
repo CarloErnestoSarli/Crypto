@@ -27,42 +27,30 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
 /**
- * 
- * @author eghar
+ * @author carlosarli
+ * @author edharper
  * @created 15/03/16
  */
 public class PuzzleCracking {
     
-    /**
-     *
-     */
+   
     public ArrayList<String> puzzles = new ArrayList();
     
-    /**
-     *
-     */
+   
     public String chosenPuzzle;
 
-    /**
-     *
-     */
+ 
     public String sharedKey;
 
-    /**
-     *
-     */
+    
     public byte[] sharedKeyBob = new byte[8];
 
-    /**
-     *
-     */
+    
     public byte[] sharedKeyAlice = new byte[8];
     
     static Cipher cipher;
 
-    /**
-     *
-     */
+    
     public CryptoLib cl;
     
     byte[] puzzleNumber = new byte[2];
@@ -87,7 +75,7 @@ public class PuzzleCracking {
     
     /**
      * chooses random puzzle to decrypt.
-     * @return 
+     * @return chosen puzzle
      */
     public String choosePuzzle(){
         Random rand = new Random();
@@ -99,8 +87,8 @@ public class PuzzleCracking {
     
     /**
      * Generates 8 byte array for DES Key creation
-     * @param i
-     * @return 
+     * @param i a random puzzle
+     * @return  desBytes the des key
      */
     public byte[] genEncryptionKeyBytes(int i){        
         // Gen leading bytes
@@ -121,7 +109,9 @@ public class PuzzleCracking {
     
     /**
      * Cracks puzzle by looping through and generating all possible keys
-     * @return 
+     * then cracks the puzzles, it then selects the puzzle with leading 0s,
+     * saves the key used to crack it and the cracked puzzle number
+     * @return sharedKeyBob
      * @throws java.security.spec.InvalidKeySpecException
      * @throws java.security.InvalidKeyException
      * @throws java.security.NoSuchAlgorithmException
@@ -177,8 +167,8 @@ public class PuzzleCracking {
     
     /**
      * Checks puzzle is the puzzle we are looking for
-     * @param decryptedPuzzle
-     * @return 
+     * @param decryptedPuzzle the decrypted puzzle to be checked
+     * @return allZero which is true if the puzzle starts with 16 0s
      */
     private boolean checkPuzzle(byte[] decryptedPuzzle){
         
@@ -200,7 +190,7 @@ public class PuzzleCracking {
      * BOB
      * Gets bobs shared key from the byte array he decrypts
      * @param decryptedByte
-     * @return 
+     * @return sharedKeyBob
      */     
     public byte[] getSharedKeyBob(byte[] decryptedByte){  
 
@@ -214,7 +204,7 @@ public class PuzzleCracking {
      * BOB
      * Gets puzzle number from the decrypted puzzle
      * @param decryptedPuzzle
-     * @return 
+     * @return puzzleNumber
      */
     public byte[] getPuzzleNumber(byte[] decryptedPuzzle){
         
@@ -231,8 +221,9 @@ public class PuzzleCracking {
     
     /**
      * ALICE
-     * Puzzle lookup using puzzle number
-     * @return 
+     * Puzzle lookup using puzzle number, it reads all the puzzles from the file and
+     * checks that the id corresponds to the cracked puzzle id
+     * @return currentPuzzle
      */
     public byte[] puzzleLookUp(){
         byte[] currentPuzzle = new byte[26];
@@ -264,7 +255,7 @@ public class PuzzleCracking {
      * ALICE
      * Gets Alice's shared key from the current puzzle she has looked up
      * @param currentPuzzle
-     * @return 
+     * @return sharedKeyAlice
      */
     public byte[] sharedKeyAlice(byte[] currentPuzzle){
         try{

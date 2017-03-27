@@ -19,7 +19,8 @@ import javax.crypto.SecretKey;
 /**
  * ALICE & BOB
  * Encrypts and decrypts messages
- * @author eghar
+ * @author carlosarli
+ * @author edharper
  * @date 21/03/2017
  */
 public class Messages {
@@ -35,7 +36,7 @@ public class Messages {
      * Encrypts string message.
      * @param message
      * @param sharedKey
-     * @return
+     * @return encryptedText
      * @throws InvalidKeySpecException
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
@@ -62,7 +63,7 @@ public class Messages {
      * Decrypts string encrypted message
      * @param encryptedMessage
      * @param sharedKey
-     * @return
+     * @return decryptedText
      * @throws IllegalBlockSizeException
      * @throws BadPaddingException
      * @throws InvalidKeySpecException

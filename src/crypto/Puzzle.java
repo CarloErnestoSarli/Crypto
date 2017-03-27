@@ -9,71 +9,72 @@ import java.util.Arrays;
 
 /**
  *
- * @author eghar
+ * @author carlosarli
+ * @author edharper
  * @created 14/03/16
  */
 public class Puzzle {
     
-    private int number;
+    private int m_Number;
     private byte[] lz;
     private byte[] id;
     private byte[] des;
     
     /**
-     *
+     * Constructor for the puzzle class
      * @param number
      * @param id
      * @param des
      */
     public Puzzle(int number, byte[] id, byte[] des){
-        this.number = number;
+        m_Number = number;
         this.lz = new byte[16];
         this.id = id;
         this.des = des;
     }
     
     /**
-     *
-     * @return
+     * getter for the variable m_Number
+     * @return m_Number
      */
     public int getNumber(){
-        return number;
+        return m_Number;
     }
     
     /**
-     *
-     * @return
+     * getter for the 16 byte all 0s array
+     * @return lz
      */
     public byte[] getLz(){
         return lz;
     }
     
     /**
-     *
-     * @return
+     * getter for the array containing the id of the puzzle
+     * @return id
      */
     public byte[] getId(){
         return id;
     }
     
     /**
-     *
-     * @return
+     * getter for the 8byte key of the puzzle
+     * @return des
      */
     public byte[] getDes(){
         return des;
     }
     
     /**
-     *
+     * setter for the variable m_Number
      * @param number
      */
     public void setNumber(int number){
-        this.number = number;
+        m_Number = number;
     }
     
     /**
-     *
+     * setter for the array containing the id of the puzzle
      * @param id
      */
     public void setId(byte[] id){
@@ -81,7 +82,7 @@ public class Puzzle {
     }
     
     /**
-     *
+     *  setter for the array containing the des key of the puzzle
      * @param id
      */
     public void setDes(byte[] id){
@@ -89,8 +90,8 @@ public class Puzzle {
     }
     
     /**
-     *
-     * @return
+     * Creates the puzzle combining the three different byte arrays generated before
+     * @return puzzleBytes
      */
     public byte[] getPuzzleBytes(){
         byte[] puzzleBytes = new byte[getLz().length + getId().length + getDes().length];
@@ -105,6 +106,11 @@ public class Puzzle {
         System.arraycopy(getDes(), 0, puzzleBytes, getId().length + getLz().length, getDes().length);
         return puzzleBytes;
     }
+    
+    /**
+     * prints the puzzles out as strings
+     *  
+     */
     
     public String toString(){
         return Arrays.toString(getPuzzleBytes());
