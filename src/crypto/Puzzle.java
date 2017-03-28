@@ -113,7 +113,8 @@ public class Puzzle {
      */
     
     public String toString(){
-        return Arrays.toString(getPuzzleBytes());
+        
+        return "id = " + Arrays.toString(getId()) + " " + " Key = " + Arrays.toString(getDes());
          
     }
     

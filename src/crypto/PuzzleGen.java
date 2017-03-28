@@ -28,30 +28,19 @@ import javax.crypto.SecretKey;
  */
 public class PuzzleGen {
     
-    /**
-     *
-     */
+    
     public final int MAX_PUZZLES = 1024;
     
     static Cipher cipher;
 
-    /**
-     *
-     */
     public CryptoLib cl;
     
-    /**
-     *
-     */
     public ArrayList<Puzzle> puzzles;
 
-    /**
-     *
-     */
     public ArrayList<byte[]> ePuzzles;
     
     /**
-     *
+     * constructor for the puzzleGen class
      */
     public PuzzleGen(){
         this.puzzles = new ArrayList();
@@ -88,6 +77,7 @@ public class PuzzleGen {
     public void generate() throws NoSuchAlgorithmException{
         
         for(int i=0; i < MAX_PUZZLES; i++){
+            
             // Get puzzle unique id
             byte[] id = genPId(i);
             

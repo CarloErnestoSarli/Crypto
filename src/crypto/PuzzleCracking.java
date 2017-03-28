@@ -161,7 +161,7 @@ public class PuzzleCracking {
             
         }
         System.out.println("Bob's shared key: " + Arrays.toString(sharedKeyBob));
-        System.out.println("Bob sends alice puzzle number: " + Arrays.toString(puzzleNumber));
+        System.out.println("Bob sends alice puzzle number: " + cl.byteArrayToSmallInt(puzzleNumber));
         return sharedKeyBob;
     }
     
